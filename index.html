@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Haunter</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://kit.fontawesome.com/106c35bf5a.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js" defer></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js" defer></script>
+  <script src="/scripts/app.js" defer></script>
+</head>
+<body class="bg-[#202430]">
+  <div id="loading-screen" class="w-full hidden fixed z-20 bg-black/50 h-full items-center justify-center mx-auto p-6">
+  <img src="/images/search-gi.gif" alt="" srcset="">
+  </div>
+  <section class="w-full p-6 md:p-12 lg:p-6 lg:max-w-7xl mx-auto">
+    <div class="flex flex-col gap-12 items-center w-full">
+      <a class="text-white font-bold text-[1.5rem]" href="">JobHunter</a>
+      <div class="flex flex-col-reverse lg:flex-row items-center justify-center lg:justify-between text-center lg:text-left">
+        <div class="flex flex-col items-center lg:items-start gap-6">
+          <h4 class="text-white text-[3rem] md:text-[4rem] md:max-w-lg lg:max-w-7xl font-semibold">Discover more than <span class="text-[#26A4FF]">5000+ Jobs</span></h4>
+          <img class="md:max-w-lg " src="/images/writeimg.png" alt="" srcset="">
+          <p class="text-white max-w-lg">Great platform for a job seeker that is searching for a new career heights and passionate about startups.</p>
+          <form id="search-job-form" action="" class="flex flex-col md:flex-row w-full md:items-center justify-between gap-4 lg:gap-0 p-4 bg-white rounded-md">
+            <div class="flex gap-2 items-center justify-start">
+              <i class="fa-solid fa-briefcase"></i>
+              <input id="job-title" class="bg-transparent border-none focus:bg-transparent focus:border-none focus:outline-none w-full" type="text" placeholder="Job title eg. App Developer" required>
+            </div>
+            <div class="flex gap-2 items-center justify-start">
+              <i class="fa-solid fa-location-dot"></i>
+              <input id="job-location" class="bg-transparent border-none focus:bg-transparent focus:border-none focus:outline-none w-full" type="text" placeholder="Job location eg. Nigeria" required>
+            </div>
+            <button class="bg-[#26A4FF] py-3 px-6 rounded-md text-white hover:bg-transparent hover:border hover:border-black hover:text-black transition-colors duration-100">Search Job</button>
+          </form>
+        </div>
+        <img class="w-full md:max-w-lg animate__animated animate__bounceIn" src="/images/home-img.png" alt="" srcset="">
+      </div>
+    </div>
+  </section>
+  <!--Search Results-->
+  <section id="search-results" class="w-full hidden p-6 md:p-12 lg:p-6 lg:max-w-7xl mx-auto">
+    <div class="flex flex-col gap-6 items-center w-full">
+      <h4 id="search-result-title" class="text-white text-[2rem] lg:text-[3rem] text-center font-light">Job Results for <span class="font-bold">App Developer</span></h4>
+      <div id="all-jobs-results" class="flex flex-col md:flex-row md:flex-wrap gap-4 items-center w-full">
+        <!--Job Card
+        <div class="flex flex-col gap-4 items-center md:items-start w-full max-w-sm bg-white rounded-md p-4">
+          <div class="flex items-center justify-between w-full">
+            <img class="rounded-full max-w-12" src="/images/rlogo.png" alt="">
+            <div class="bg-slate-200 flex items-center rounded-full text-black px-4 py-2">
+              Full Time
+            </div>
+          </div>
+          <div class="flex flex-col gap-2 items-start justify-start w-full">
+            <h6 class="font-semibold text-[1.2rem]">Backend Developer</h6>
+            <div class="flex items-center gap-2">
+              <p>Revolut</p>
+              <div class="w-2 h-2 bg-slate-400 rounded-full"></div>
+              <p>Madrid, Spain</p>
+            </div>
+          </div>
+          <p class="text-slate-500">Revolut is looking for Email Marketing to help team ma ...</p>
+          <div class="flex items-center gap-2 justify-start w-full">
+            <div class="flex items-center rounded-full bg-[#FF6550]/10 text-[#FF6550] px-4 py-2">
+              Development 
+            </div>
+            <div class="flex items-center rounded-full bg-[#4640DE]/10 text-[#4640DE] px-4 py-2">
+              Design 
+            </div>
+          </div>
+        </div>
+        -->
+      </div>
+      <button id="show-more-results-btn" class="hover:bg-[#26A4FF] hover:border-none py-3 px-6 rounded-md text-white hover:bg-transparent border border-white transition-colors duration-100">Show more results</button>
+    </div>
+  </section>
+  <!--Job Description-->
+  <section id="job-description" class="hidden w-full p-6 md:p-12 lg:p-6 lg:max-w-7xl mx-auto space-y-6">
+    <div class="flex gap-8 items-center">
+      <div id="go-back-to-jobs-btn"><i class="fa-solid fa-arrow-left" style="color: #ffffff;"></i></div>
+      <h4 class="description-heading text-white text-[2rem] lg:text-[3rem] text-center font-light">Job Details for <span class="font-bold">App Developer</span></h4>
+    </div>
+    <div class="flex flex-col gap-6 items-center w-full">
+      <div class="flex flex-col md:flex-row items-center justify-between w-full bg-white rounded-md p-4 gap-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-start gap-4 w-full">
+          <img class="company-logo rounded-full max-w-12" src="/images/rlogo.png" alt="">
+          <div class="flex flex-col gap-2">
+            <h6 class="job-title font-semibold text-[1.2rem]">Backend Developer</h6>
+            <div class="flex items-center gap-2">
+              <p class="job-company">Revolut</p>
+              <div class="w-2 h-2 bg-slate-400 rounded-full"></div>
+              <p class="job-town-and-country">Madrid, Spain</p>
+              <div class="w-2 h-2 bg-slate-400 rounded-full"></div>
+              <p class="employment-type">Full time</p>
+            </div>
+          </div>
+        </div>
+        <a id="apply-job-btn" href="" class="bg-[#26A4FF] py-3 px-6 w-full md:max-w-xs rounded-md text-white hover:bg-transparent hover:border hover:border-black hover:text-black transition-colors duration-100 text-center">Apply Job</a>
+      </div>
+      <!--Job Details-->
+      <div class="flex flex-col lg:flex-row items-start justify-between bg-white rounded-md w-full p-6 gap-4 lg:gap-10">
+        <!--Job Description-->
+        <div class="flex flex-col gap-4 w-full lg:w-2/3">
+          <div class="flex flex-col gap-2">
+            <h6 class="font-semibold text-[1.2rem]">Job Description</h6>
+            <p class="job-description text-slate-500">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum laudantium, voluptate corrupti dolore delectus aliquam error, minus ducimus ullam temporibus reprehenderit debitis totam ea quisquam hic magnam illum, autem corporis voluptatibus veniam! Quae, distinctio ex doloremque fuga omnis illo reiciendis!</p>
+          </div>
+        </div>
+        <div class="flex flex-col items-start justify-start w-full lg:w-1/3">
+          <!--About Role-->
+          <div class="flex flex-col gap-2 w-full border-b border-slate-500 py-6">
+            <h6 class="font-semibold text-[1.2rem]">About this role</h6>
+            <div class="flex md:items-center justify-between w-full gap-2">
+              <p class="text-slate-500">Apply before</p>
+              <p class="application-deadline font-semibold">July 31, 2021</p>
+            </div>
+            <div class="flex md:items-center justify-between w-full gap-2">
+              <p class="text-slate-500">Job Posted On</p>
+              <p class="date-of-posting font-semibold">July 31, 2021</p>
+            </div>
+            <div class="flex md:items-center justify-between w-full gap-2">
+              <p class="text-slate-500">Job Type</p>
+              <p class="job-employ-type font-semibold">Full Time</p>
+            </div>
+            <!--
+            <div class="flex md:items-center justify-between w-full gap-2">
+              <p class="text-slate-500">Salary</p>
+              <p class="salary-range font-semibold">$75k-$85k USD</p>
+            </div>
+            -->
+          </div>
+          <!--Job Categories-->
+          <div id="job-categories-section" class="flex flex-col gap-2 w-full border-b border-slate-500 py-6">
+            <h6 class="font-semibold text-[1.2rem]">Categories</h6>
+            <div id="job-categories" class="flex flex-wrap items-center gap-2 justify-start w-full">
+              <!--
+              <div class="flex items-center rounded-full bg-[#FF6550]/10 text-[#FF6550] px-4 py-2">
+                Development 
+              </div>
+              -->
+            </div>
+          </div>
+          <!--Required Skills-->
+          <div id="job-required-skills-section" class="hidden flex-col gap-2 w-full pt-6">
+            <h6 class="font-semibold text-[1.2rem]">Required Skills</h6>
+            <div id="job-required-skills" class="flex flex-wrap items-center gap-2 justify-start w-full">
+              <!--
+              <div class="flex items-center rounded-full bg-[#4640DE]/10 text-[#4640DE] px-4 py-2">
+                Design 
+              </div>
+              -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
