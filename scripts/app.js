@@ -179,8 +179,13 @@ function jobDetailsPage(job){
   jobDescription.innerHTML = paragraphs
 
   const jobDeadline = jobDetailsSection.querySelector('.application-deadline');
-  const formattedDate = dateFormatter(job.job_offer_expiration_datetime_utc)
-  jobDeadline.textContent = formattedDate;
+  if(job.job_offer_expiration_datetime_utc != null){
+    const formattedDate = dateFormatter(job.job_offer_expiration_datetime_utc)
+    jobDeadline.textContent = formattedDate;
+  }else if(job.job_offer_expiration_datetime_utc === null){
+    jobDeadline.parentElement.classList.remove('flex');
+    jobDeadline.parentElement.classList.add('hidden');
+  }
 
   const jobPostingDate = jobDetailsSection.querySelector('.date-of-posting');
   const postingFormattedDate = dateFormatter(job.job_posted_at_datetime_utc)
@@ -191,10 +196,7 @@ function jobDetailsPage(job){
 
   const jobCategorySec = document.getElementById('job-categories-section');
   const jobCategory = document.getElementById('job-categories');
-  if(job.job_occupational_categories != "null"){
-    jobCategorySec.classList.remove('flex');
-    jobCategorySec.classList.add('hideCate');
-
+  if(job.job_occupational_categories != null){
     const allCategories = job.job_occupational_categories;
     allCategories.forEach((cate)=>{
       const newCateElement = document.createElement('div')
@@ -202,14 +204,14 @@ function jobDetailsPage(job){
       newCateElement.textContent = cate;
       jobCategory.append(newCateElement);
     })
+  }else if(job.job_occupational_categories === null){
+    jobCategorySec.classList.remove('flex');
+    jobCategorySec.classList.add('hidden');
   }
 
   const requredSkillsSec = document.getElementById('job-required-skills-section');
   const requredSkills = document.getElementById('job-required-skills');
-  if(job.job_required_skills != "null"){
-    requredSkillsSec.classList.remove('hidden');
-    requredSkillsSec.classList.add('flex');
-
+  if(job.job_required_skills != null){
     const allSkills = job.job_required_skills;
     allSkills.forEach((skill)=>{
       const newSkillElement = document.createElement('div')
@@ -217,6 +219,9 @@ function jobDetailsPage(job){
       newSkillElement.textContent = skill;
       requredSkills.append(newSkillElement);
     })
+  }else if(job.job_required_skills === null){
+    requredSkillsSec.classList.remove('flex');
+    requredSkillsSec.classList.add('hidden');
   }
 }
 
