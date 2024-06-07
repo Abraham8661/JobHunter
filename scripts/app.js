@@ -50,6 +50,7 @@ function jobResults(response) {
   const allJobsSection = document.getElementById("all-jobs-results");
   const searchResultTitle = document.getElementById('search-result-title');
   searchResultTitle.innerHTML = `Job Results for <span class="font-bold">${userJobSearchTitle}</span>`
+  
   jobResultSection.classList.remove("hidden");
   
   const result = response.data.data;
@@ -98,12 +99,17 @@ function searchJob() {
   const searchJobForm = document.getElementById("search-job-form");
   const jobTitle = document.getElementById("job-title");
   const jobLocation = document.getElementById("job-location");
+  const allJobsSection = document.getElementById("all-jobs-results");
   searchJobForm.addEventListener("submit", (event) => {
     event.preventDefault();
     loadingScreen();
     //Save user job search title to userJobSearchTitle variable
     userJobSearchTitle = jobTitle.value;
     getJob(jobTitle.value, jobLocation.value).then((response) => {
+      //Set all jobs section to empty first before creating new job and set num of jobs to display to 9
+      allJobsSection.innerHTML = '';
+      NUM_OF_JOBS_TO_SHOW = 9;
+
       jobResults(response);
       showMoreResults(response);
     });
@@ -119,10 +125,7 @@ function showMoreResults(response){
   const allJobsSection = document.getElementById("all-jobs-results");
   const allJobs = allJobsSection.querySelectorAll(".newjob")
   moreResultBtn.addEventListener('click', ()=>{
-    //let index = 0
-    //allJobs.forEach((job)=>{
-    //    allJobsSection.replaceChild(job)
-    //})
+    allJobsSection.innerHTML = '';
     NUM_OF_JOBS_TO_SHOW+=9
     jobResults(response);
   })
@@ -133,7 +136,8 @@ function dateFormatter(dateToFormat){
   const createdAt = new Date(dateToFormat);
 
   // Format date and time using Moment.js
-  const formattedDate = moment(createdAt).format('MMMM Do YYYY, h:mm:ss a');
+  //const formattedDate = moment(createdAt).format('MMMM Do YYYY, h:mm:ss a');
+  const formattedDate = moment(createdAt).format('MMMM Do YYYY');
   return formattedDate;
 }
 
@@ -145,8 +149,8 @@ function jobDetailsPage(job){
   jobDetailsSection.classList.remove('hidden')
 
   //Updating the job details page with job information
-  const desHeading = jobDetailsSection.querySelector('.description-heading');
-  desHeading.innerHTML = `Job Details for <span class="font-bold">${job.job_title}</span>`
+  //const desHeading = jobDetailsSection.querySelector('.description-heading');
+  //desHeading.innerHTML = `Job Details for <span class="font-bold">${job.job_title}</span>`
 
   const jobLogo = jobDetailsSection.querySelector('.company-logo');
   jobLogo.src = `${job.employer_logo}`
@@ -179,7 +183,7 @@ function jobDetailsPage(job){
   jobDeadline.textContent = formattedDate;
 
   const jobPostingDate = jobDetailsSection.querySelector('.date-of-posting');
-  const postingFormattedDate = dateFormatter(job.job_offer_expiration_datetime_utc)
+  const postingFormattedDate = dateFormatter(job.job_posted_at_datetime_utc)
   jobPostingDate.textContent = postingFormattedDate;
 
   const jobType = jobDetailsSection.querySelector('.job-employ-type');
